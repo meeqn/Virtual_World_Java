@@ -13,6 +13,8 @@ public class Main {
         organisms.add(new Sheep(new Point(1,0)));
         organisms.add(new Wolf(new Point(2,0)));
         organisms.add(new Turtle(new Point(3,0)));
+        organisms.add(new Fox(new Point(6,0)));
+        organisms.add(new Fox(new Point(6,1)));
         return organisms;
     }
     public static void main(String[] args) {

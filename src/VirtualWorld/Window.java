@@ -47,6 +47,7 @@ public class Window extends JFrame {
         JTextArea logTextArea = new JTextArea("...");
         JScrollPane scrollPane = new JScrollPane(logTextArea);
         logSpace.add(scrollPane);
+        world.setLogTextArea(logTextArea);
         add(logSpace);
 
         JPanel buttonSpace = new JPanel();

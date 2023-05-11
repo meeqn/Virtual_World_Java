@@ -44,6 +44,7 @@ public abstract class World {
     protected Vector<Organism> organisms = new Vector<>();
 
     protected JPanel boardSpace;
+    protected JTextArea logTextArea;
 
     protected World(int sizeX, int sizeY, Vector<Organism> organisms){
         this.board = new Board(sizeX, sizeY);
@@ -79,6 +80,13 @@ public abstract class World {
     public void setBoardSpace(JPanel boardSpace){
         this.boardSpace = boardSpace;
     }
+    public void setLogTextArea(JTextArea logTextArea){
+        this.logTextArea = logTextArea;
+    }
+
+    public JTextArea getLogTextArea(){
+        return logTextArea;
+    }
 
     public abstract Point generateRandomNeighboringField(Organism organism, boolean mustBeEmpty, int range);
 
@@ -107,5 +115,9 @@ public abstract class World {
     public void moveOrganismToGraveyard(Organism organism){
         this.board.setBoardField(organism.getPos(), null);
         organism.setAlive(false);
+    }
+
+    public Map<Integer, String> getDirections(){
+        return directions;
     }
 }

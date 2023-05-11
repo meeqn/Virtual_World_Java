@@ -76,4 +76,5 @@ public abstract class Organism implements Comparable<Organism>{
             return this.initiative.compareTo(o.getAge());
         return 0;
     }
+    protected abstract Organism createChild(Point pos);
 }

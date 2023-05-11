@@ -1,5 +1,7 @@
 package VirtualWorld.Animals;
 
+import VirtualWorld.Organism;
+
 import java.awt.*;
 
 public class Wolf extends Animal{
@@ -11,7 +13,7 @@ public class Wolf extends Animal{
     }
 
     @Override
-    protected Animal createChild(Point pos) {
-        return new Sheep(pos);
+    protected Organism createChild(Point pos) {
+        return new Wolf(pos);
     }
 }

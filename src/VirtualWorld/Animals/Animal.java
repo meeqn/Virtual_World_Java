@@ -7,14 +7,12 @@ import VirtualWorld.Organism;
 public abstract class Animal extends Organism{
     protected Point nextPos;
     protected static final int STANDARD_MOVE_DIST = 1;
-    int moveDist;
+    protected int moveDist;
 
     protected Animal(Integer initiative, Integer strength, Point pos, Color color) {
         super(initiative, strength, pos, color);
         this.moveDist = STANDARD_MOVE_DIST;
     }
-
-    protected abstract Animal createChild(Point pos);
 
     protected void breed(Animal secondAnimal){
         Point childPos;
@@ -23,7 +21,7 @@ public abstract class Animal extends Organism{
             childPos = world.generateRandomNeighboringField(secondAnimal, true, 1);
 
         if(childPos != null){
-            Animal offspring = this.createChild(childPos);
+            Organism offspring = this.createChild(childPos);
             world.addOrganismToWorld(offspring, false);
             secondAnimal.setActive(false);
         }
@@ -51,6 +49,10 @@ public abstract class Animal extends Organism{
             this.organismGetsAttacked(invader);
         }
 
+    }
+
+    protected void setMoveDist(int moveDist){
+        this.moveDist = moveDist;
     }
 
     public Point getNextPos() {

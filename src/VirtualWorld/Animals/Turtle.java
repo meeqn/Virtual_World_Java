@@ -1,10 +1,12 @@
 package VirtualWorld.Animals;
 
+import VirtualWorld.Organism;
+
 import java.awt.*;
 
 public class Turtle extends Animal{
-    final static int TURTLE_INITIATIVE = 5;
-    final static int TURTLE_STRENGTH = 9;
+    final static int TURTLE_INITIATIVE = 1;
+    final static int TURTLE_STRENGTH = 2;
     final static Color TURTLE_COLOR = new Color(77, 135, 100);
     public Turtle(Point pos) {
         super(TURTLE_INITIATIVE, TURTLE_STRENGTH, pos, TURTLE_COLOR);
@@ -25,7 +27,7 @@ public class Turtle extends Animal{
         }
     }
     @Override
-    protected Animal createChild(Point pos) {
-        return new Sheep(pos);
+    protected Organism createChild(Point pos) {
+        return new Turtle(pos);
     }
 }
