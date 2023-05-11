@@ -15,30 +15,30 @@ public class RectWorld extends World {
         this.directions.put(1,"DOWN");
         this.directions.put(2,"LEFT");
         this.directions.put(3,"RIGHT");
-        int k = 0;
-        polygons = new Polygon[sizeX*sizeY];
-        this.tileScale = 59;
-        for(int i = 0; i<sizeY; i++){
-            for(int j = 0; j<sizeX; j++){
-                int x[] = {j*tileScale, j*tileScale+tileScale, j*tileScale+tileScale, j*tileScale};
-                int y[] = {i*tileScale, i*tileScale, i*tileScale+tileScale, i*tileScale+tileScale};
-                polygons[k] = new Polygon(x,y,polygonPoints);
-                k++;
-            }
-        }
     }
     @Override
     public void setBoardSpace(JPanel boardSpace){
         super.setBoardSpace(boardSpace);
         this.tileScale = Math.min(boardSpace.getWidth()/this.getSizeX(), boardSpace.getHeight()/this.getSizeY());
+        this.polygons = new Polygon[this.getSizeY()][this.getSizeX()];
+        for(int i = 0; i<this.getSizeY(); i++){
+            for(int j = 0; j<this.getSizeX(); j++){
+                int[] x = {j*tileScale, j*tileScale+tileScale, j*tileScale+tileScale, j*tileScale};
+                int[] y = {i*tileScale, i*tileScale, i*tileScale+tileScale, i*tileScale+tileScale};
+                this.polygons[i][j] = new Polygon(x,y,polygonPoints);
+            }
+        }
     }
     @Override
     public Point generateRandomNeighboringField(Organism organism, boolean mustBeEmpty, int range) {
         int move;
         byte control = 0b0000;
-        Point newPos = organism.getPos();
+        Point newPos = new Point();
         do{
-            move = (int)(Math.random()*(directions.size() + 1));
+            newPos.y = organism.getPos().y;
+            newPos.x = organism.getPos().x;
+
+            move = (int)(Math.random()*(directions.size())); //range from 0 to 3
             switch(directions.get(move)){
                 case "UP":
                     newPos.y-=range;

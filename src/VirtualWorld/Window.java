@@ -1,5 +1,6 @@
 package VirtualWorld;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,15 +22,23 @@ public class Window extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.setColor(Color.BLUE);
-                for(Polygon polygon : world.polygons) {
-                    g.drawPolygon(polygon);
-                    g.fillPolygon(polygon);
+                for(int i = 0; i<world.getSizeY(); i++) {
+                    for(int j = 0; j < world.getSizeX(); j++) {
+                        Point p = new Point(j,i);
+                        if(world.board.isFieldEmpty(p))
+                            g.setColor(Color.LIGHT_GRAY);
+                        else
+                            g.setColor(world.board.getBoardField(p).getColor());
+
+                        g.drawPolygon(world.getPolygons()[i][j]);
+                        g.fillPolygon(world.getPolygons()[i][j]);
+                    }
                 }
             }
         };
         boardSpace.setBounds(0,0, this.getWidth(),this.getHeight()/2 + this.getHeight()/4 -1);
         boardSpace.setLayout(null);
+        world.setBoardSpace(boardSpace);
         add(boardSpace);
 
         JPanel logSpace = new JPanel();
@@ -44,10 +53,9 @@ public class Window extends JFrame {
         buttonSpace.setBounds(0,boardSpace.getHeight()+logSpace.getHeight()+10, this.getWidth(),this.getHeight()/8);
         buttonSpace.setLayout(new FlowLayout());
         JButton nextTurnButton = new JButton("Next Turn");
-        nextTurnButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                world.nextTurn();
-            }
+        nextTurnButton.addActionListener(e -> {
+            world.nextTurn();
+            boardSpace.repaint();
         });
         buttonSpace.add(nextTurnButton);
         JButton saveButton = new JButton("Save");
@@ -60,7 +68,6 @@ public class Window extends JFrame {
 
         setLayout(null);
         setVisible(true);
-        //world.setBoardSpace(boardSpace); //TODO add the same for logspace
 
 
     }

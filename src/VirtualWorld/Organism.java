@@ -34,6 +34,16 @@ public abstract class Organism implements Comparable<Organism>{
         this.world = world;
     }
     public abstract void collision(Animal invader);
+
+    public void organismGetsAttacked(Animal invader){
+        if(strength < invader.getStrength()){
+            world.moveOrganismToGraveyard(this);
+            world.moveAnimalToNextPos(invader);
+        }
+        else{
+            world.moveOrganismToGraveyard(invader);
+        }
+    }
     public int getAge() {
         return age;
     }
@@ -55,9 +65,10 @@ public abstract class Organism implements Comparable<Organism>{
     public void setStrength(int strength) {
         this.strength = strength;
     }
-    public World getWorld() {
-        return world;
+    public Color getColor() {
+        return color;
     }
+
     public int compareTo(Organism o){
         if(this.initiative!=o.getInitiative())
             return this.initiative.compareTo(o.getInitiative());

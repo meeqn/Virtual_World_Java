@@ -3,7 +3,6 @@ import java.awt.Point;
 import java.awt.Color;
 import VirtualWorld.Organism;
 
-import javax.management.DescriptorKey;
 
 public abstract class Animal extends Organism{
     protected Point nextPos;
@@ -15,33 +14,47 @@ public abstract class Animal extends Organism{
         this.moveDist = STANDARD_MOVE_DIST;
     }
 
+    protected abstract Animal createChild(Point pos);
+
     protected void breed(Animal secondAnimal){
-        //TODO
+        Point childPos;
+        childPos = world.generateRandomNeighboringField(this, true, 1);
+        if(childPos==null)
+            childPos = world.generateRandomNeighboringField(secondAnimal, true, 1);
+
+        if(childPos != null){
+            Animal offspring = this.createChild(childPos);
+            world.addOrganismToWorld(offspring, false);
+            secondAnimal.setActive(false);
+        }
     }
 
     @Override
     protected void action() {
-        //TODO
+        nextPos = world.generateRandomNeighboringField(this, false, moveDist);
+        if(nextPos!=null){
+            if(world.getBoard().isFieldEmpty(nextPos))
+                world.moveAnimalToNextPos(this);
+            else{
+                world.getBoard().getBoardField(nextPos).collision(this);
+            }
+        }
+        this.setActive(false);
     }
 
     @Override
     public void collision(Animal invader){
-        //TODO
-    }
+        if(this.getClass().equals(invader.getClass())){
+            this.breed(invader);
+        }
+        else{
+            this.organismGetsAttacked(invader);
+        }
 
-    public int getMoveDist() {
-        return moveDist;
     }
 
     public Point getNextPos() {
         return nextPos;
     }
 
-    public void setNextPos(Point nextPos) {
-        this.nextPos = nextPos;
-    }
-
-    protected void setMoveDist(int moveDist) {
-        this.moveDist = moveDist;
-    }
 }

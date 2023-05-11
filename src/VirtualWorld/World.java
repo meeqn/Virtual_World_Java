@@ -6,9 +6,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.Map;
+import VirtualWorld.Animals.*;
 
 public abstract class World {
-    protected class Board {
+    public static class Board {
         protected int sizeX, sizeY;
         private Organism[][] fields;
         public Board(int sizeX, int sizeY){
@@ -28,13 +29,16 @@ public abstract class World {
         }
 
         public boolean isFieldEmpty(Point field){
-            if(getBoardField(field)==null)
-                return true;
-            return false;
+            return getBoardField(field) == null;
         }
     }
     protected int polygonPoints;
-    public Polygon polygons[];
+    protected Polygon[][] polygons;
+
+    public Polygon[][] getPolygons() {
+        return polygons;
+    }
+
     protected Board board;
     protected Map<Integer, String> directions = new HashMap<>();
     protected Vector<Organism> organisms = new Vector<>();
@@ -80,14 +84,24 @@ public abstract class World {
 
     public void nextTurn(){
         Collections.sort(organisms);
-        for(Organism organism : organisms){
-            if(organism.isActive())
-                organism.action();
-            organism.setActive(true);
-            organism.ageing();
+        for(int i=0; i<organisms.size(); i++){
+            if(organisms.elementAt(i).isActive())
+                organisms.elementAt(i).action();
+            organisms.elementAt(i).setActive(true);
+            organisms.elementAt(i).ageing();
         }
         //TODO DRAW STATE
         this.ridOfTheDead();
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void moveAnimalToNextPos(Animal animal){
+        board.setBoardField(animal.getPos(), null);
+        animal.setPos(animal.getNextPos());
+        board.setBoardField(animal.getPos(), animal);
     }
 
     public void moveOrganismToGraveyard(Organism organism){

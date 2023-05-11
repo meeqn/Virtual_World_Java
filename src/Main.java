@@ -1,5 +1,5 @@
 import VirtualWorld.*;
-import VirtualWorld.Animals.Sheep;
+import VirtualWorld.Animals.*;
 import VirtualWorld.Window;
 import VirtualWorld.Worlds.RectWorld;
 
@@ -7,10 +7,16 @@ import java.awt.*;
 import java.util.Vector;
 
 public class Main {
+    private static Vector<Organism> createOrganisms(){
+        Vector<Organism> organisms = new Vector<>();
+        organisms.add(new Sheep(new Point(0,0)));
+        organisms.add(new Sheep(new Point(1,0)));
+        organisms.add(new Wolf(new Point(2,0)));
+        organisms.add(new Turtle(new Point(3,0)));
+        return organisms;
+    }
     public static void main(String[] args) {
-        Sheep dolly = new Sheep(new Point(4,5));
-        Vector<Organism> organisms = new Vector<Organism>();
-        organisms.add(dolly);
+        Vector<Organism> organisms = createOrganisms();
         World world = new RectWorld(10, 10, organisms);
         Window mainWin = new Window(world, 800, 800);
     }
