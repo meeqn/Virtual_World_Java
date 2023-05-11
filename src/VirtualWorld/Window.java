@@ -22,8 +22,10 @@ public class Window extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.setColor(Color.BLUE);
-                for(Organism organism : world.organisms)
-                    g.fillRect(organism.getPos().x, organism.getPos().y, 59, 59);
+                for(Polygon polygon : world.polygons) {
+                    g.drawPolygon(polygon);
+                    g.fillPolygon(polygon);
+                }
             }
         };
         boardSpace.setBounds(0,0, this.getWidth(),this.getHeight()/2 + this.getHeight()/4 -1);

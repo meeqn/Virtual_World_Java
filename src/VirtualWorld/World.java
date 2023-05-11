@@ -10,7 +10,6 @@ import java.util.Map;
 public abstract class World {
     protected class Board {
         protected int sizeX, sizeY;
-
         private Organism[][] fields;
         public Board(int sizeX, int sizeY){
             fields = new Organism[sizeY][sizeX];
@@ -34,6 +33,8 @@ public abstract class World {
             return false;
         }
     }
+    protected int polygonPoints;
+    public Polygon polygons[];
     protected Board board;
     protected Map<Integer, String> directions = new HashMap<>();
     protected Vector<Organism> organisms = new Vector<>();

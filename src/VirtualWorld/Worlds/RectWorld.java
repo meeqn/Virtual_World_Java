@@ -10,12 +10,23 @@ public class RectWorld extends World {
     private int tileScale;
     public RectWorld(int sizeX, int sizeY, Vector<Organism> organisms){
         super(sizeX, sizeY, organisms);
+        this.polygonPoints = 4;
         this.directions.put(0,"UP");
         this.directions.put(1,"DOWN");
         this.directions.put(2,"LEFT");
         this.directions.put(3,"RIGHT");
+        int k = 0;
+        polygons = new Polygon[sizeX*sizeY];
+        this.tileScale = 59;
+        for(int i = 0; i<sizeY; i++){
+            for(int j = 0; j<sizeX; j++){
+                int x[] = {j*tileScale, j*tileScale+tileScale, j*tileScale+tileScale, j*tileScale};
+                int y[] = {i*tileScale, i*tileScale, i*tileScale+tileScale, i*tileScale+tileScale};
+                polygons[k] = new Polygon(x,y,polygonPoints);
+                k++;
+            }
+        }
     }
-
     @Override
     public void setBoardSpace(JPanel boardSpace){
         super.setBoardSpace(boardSpace);
