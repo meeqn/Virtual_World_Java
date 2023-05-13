@@ -34,6 +34,11 @@ public class Antelope extends Animal {
     }
 
     @Override
+    public String toString() {
+        return "Antelope " + statsToString();
+    }
+
+    @Override
     protected Organism createChild(Point pos) {
         return new Antelope(pos);
     }

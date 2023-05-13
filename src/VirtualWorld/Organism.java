@@ -69,6 +69,13 @@ public abstract class Organism implements Comparable<Organism>{
         return color;
     }
 
+    @Override
+    public abstract String toString();
+
+    protected String statsToString(){
+        return "s: " + strength + " x: " + pos.x + " y: " + pos.y;
+    }
+
     public int compareTo(Organism o){
         if(this.initiative!=o.getInitiative())
             return this.initiative.compareTo(o.getInitiative());

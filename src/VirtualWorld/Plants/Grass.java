@@ -14,4 +14,8 @@ public class Grass extends Plant{
     protected Organism createChild(Point pos) {
         return new Grass(pos);
     }
+    @Override
+    public String toString() {
+        return "Grass " + statsToString();
+    }
 }

@@ -31,4 +31,5 @@ public abstract class Plant extends Organism {
     public void collision(Animal invader){
         this.organismGetsAttacked(invader);
     }
+
 }

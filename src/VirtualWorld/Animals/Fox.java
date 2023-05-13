@@ -26,4 +26,8 @@ public class Fox extends Animal{
     protected Organism createChild(Point pos) {
         return new Fox(pos);
     }
+    @Override
+    public String toString() {
+        return "Fox " + statsToString();
+    }
 }

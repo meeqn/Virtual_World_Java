@@ -14,16 +14,16 @@ public abstract class Animal extends Organism{
         this.moveDist = STANDARD_MOVE_DIST;
     }
 
-    protected void breed(Animal secondAnimal){
+    protected void breed(Animal breeder){
         Point childPos;
         childPos = world.generateRandomNeighboringField(this, true, 1);
         if(childPos==null)
-            childPos = world.generateRandomNeighboringField(secondAnimal, true, 1);
+            childPos = world.generateRandomNeighboringField(breeder, true, 1);
 
         if(childPos != null){
             Organism offspring = this.createChild(childPos);
             world.addOrganismToWorld(offspring, false);
-            secondAnimal.setActive(false);
+            this.setActive(false);
         }
     }
 
@@ -42,10 +42,10 @@ public abstract class Animal extends Organism{
 
     @Override
     public void collision(Animal invader){
-        if(this.getClass().equals(invader.getClass())){
+        if(this.getClass().equals(invader.getClass()) && this.isActive()){
             this.breed(invader);
         }
-        else{
+        else if(!this.getClass().equals(invader.getClass())){
             this.organismGetsAttacked(invader);
         }
 

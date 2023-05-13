@@ -19,4 +19,8 @@ public class Dandelion extends Plant{
     protected Organism createChild(Point pos){
         return new Dandelion(pos);
     }
+    @Override
+    public String toString() {
+        return "Dandelion " + statsToString();
+    }
 }

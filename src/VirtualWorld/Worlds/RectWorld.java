@@ -5,16 +5,13 @@ import VirtualWorld.World;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Vector;
 public class RectWorld extends World {
     private int tileScale;
     public RectWorld(int sizeX, int sizeY, Vector<Organism> organisms){
         super(sizeX, sizeY, organisms);
         this.polygonPoints = 4;
-        this.directions.put(0,"UP");
-        this.directions.put(1,"DOWN");
-        this.directions.put(2,"LEFT");
-        this.directions.put(3,"RIGHT");
     }
     @Override
     public void setBoardSpace(JPanel boardSpace){
@@ -30,38 +27,23 @@ public class RectWorld extends World {
         }
     }
     @Override
-    public Point generateRandomNeighboringField(Organism organism, boolean mustBeEmpty, int range) {
-        int move;
-        byte control = 0b0000;
-        Point newPos = new Point();
-        do{
-            newPos.y = organism.getPos().y;
-            newPos.x = organism.getPos().x;
-
-            move = (int)(Math.random()*(directions.size())); //range from 0 to 3
-            switch(directions.get(move)){
-                case "UP":
-                    newPos.y-=range;
-                    control = (byte) (control | 0b1000);
-                    break;
-                case "DOWN":
-                    newPos.y+=range;
-                    control = (byte) (control | 0b0100);
-                    break;
-                case "LEFT":
-                    newPos.x-=range;
-                    control = (byte) (control | 0b0010);
-                    break;
-                case "RIGHT":
-                    newPos.x+=range;
-                    control = (byte) (control | 0b0001);
-                    break;
+    public ArrayList<Point> getSurroundingFields(Point field, boolean mustBeEmpty, int range) {
+        ArrayList<Point> surrPoints = new ArrayList<Point>();
+        int[] xParams = {0, 1, 0, -1};
+        int[] yParams = {-1, 0, 1, 0};
+        for (int i = 0; i < xParams.length; i++) {
+            Point pos = new Point(field.x, field.y);
+            pos.x += xParams[i] * range;
+            pos.y += yParams[i] * range;
+            if (this.board.isFieldInBoundaries(pos) && (!mustBeEmpty || this.board.getBoardField(pos) == null)) {
+                surrPoints.add(pos);
             }
-            if(control==0b1111){
-                return null;
-            }
-
-        }while(!this.board.isFieldInBoundaries(newPos) || (mustBeEmpty && this.board.getBoardField(newPos)!=null));
-        return newPos;
+        }
+        return surrPoints;
+    }
+    @Override
+    public Point generateNextPosUsingKeyboard(Organism org, int range){
+        this.logTextArea.append("Move using ↑ ↓ → ←\n");
+        return null; //TODO FINISH
     }
 }

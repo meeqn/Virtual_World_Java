@@ -16,4 +16,8 @@ public class Wolf extends Animal{
     protected Organism createChild(Point pos) {
         return new Wolf(pos);
     }
+    @Override
+    public String toString() {
+        return "Wolf " + statsToString();
+    }
 }

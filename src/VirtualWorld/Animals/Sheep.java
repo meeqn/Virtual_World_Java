@@ -15,4 +15,8 @@ public class Sheep extends Animal{
     protected Organism createChild(Point pos) {
         return new Sheep(pos);
     }
+    @Override
+    public String toString() {
+        return "Sheep " + statsToString();
+    }
 }

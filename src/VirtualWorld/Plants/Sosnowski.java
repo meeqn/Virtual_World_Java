@@ -4,6 +4,7 @@ import VirtualWorld.Animals.Animal;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Sosnowski extends Plant{
     final static int SOSNOWSKI_STRENGTH = 10;
@@ -18,10 +19,19 @@ public class Sosnowski extends Plant{
     }
     @Override
     public void action(){
-        //TODO for directions of different worlds
+       ArrayList<Point> surrFields = world.getSurroundingFields(this.pos, false, 1);
+       for(int i = 0; i<surrFields.size(); i++){
+           if(!world.getBoard().isFieldEmpty(surrFields.get(i))){
+                world.moveOrganismToGraveyard(world.getBoard().getBoardField(surrFields.get(i)));
+           }
+       }
     }
     @Override
     protected Organism createChild(Point pos){
         return new Sosnowski(pos);
+    }
+    @Override
+    public String toString() {
+        return "Sosnowski's Hogweed " + statsToString();
     }
 }

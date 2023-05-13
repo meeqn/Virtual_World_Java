@@ -2,10 +2,8 @@ package VirtualWorld;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.Map;
+import java.util.*;
+
 import VirtualWorld.Animals.*;
 
 public abstract class World {
@@ -40,11 +38,11 @@ public abstract class World {
     }
 
     protected Board board;
-    protected Map<Integer, String> directions = new HashMap<>();
     protected Vector<Organism> organisms = new Vector<>();
 
     protected JPanel boardSpace;
     protected JTextArea logTextArea;
+    protected int turnNum;
 
     protected World(int sizeX, int sizeY, Vector<Organism> organisms){
         this.board = new Board(sizeX, sizeY);
@@ -55,6 +53,7 @@ public abstract class World {
                     this.addOrganismToWorld(organism, true);
             }
         }
+        turnNum = 1;
     }
     private void ridOfTheDead(){
         for(int i = 0; i<organisms.size(); i++){
@@ -82,23 +81,39 @@ public abstract class World {
     }
     public void setLogTextArea(JTextArea logTextArea){
         this.logTextArea = logTextArea;
+        logTextArea.setText("New world connected!\n");
     }
 
     public JTextArea getLogTextArea(){
         return logTextArea;
     }
 
-    public abstract Point generateRandomNeighboringField(Organism organism, boolean mustBeEmpty, int range);
-
+    public Point generateRandomNeighboringField(Organism organism, boolean mustBeEmpty, int range) {
+        ArrayList<Point> possibleMoves = getSurroundingFields(organism.getPos(), mustBeEmpty, range);
+        if(possibleMoves.isEmpty())
+            return null;
+        else{
+            int move;
+            move = (int)(Math.random()*(possibleMoves.size()));
+            return possibleMoves.get(move);
+        }
+    }
+    public abstract Point generateNextPosUsingKeyboard(Organism org, int range);
+    public abstract ArrayList<Point> getSurroundingFields(Point field, boolean mustBeEmpty, int range);
     public void nextTurn(){
+        logTextArea.append("--Turn : " + turnNum + "--\n");
         Collections.sort(organisms);
         for(int i=0; i<organisms.size(); i++){
-            if(organisms.elementAt(i).isActive())
+            if(organisms.elementAt(i).isActive() && organisms.elementAt(i).isAlive()) {
                 organisms.elementAt(i).action();
-            organisms.elementAt(i).setActive(true);
-            organisms.elementAt(i).ageing();
+                organisms.elementAt(i).ageing();
+            }
         }
-        //TODO DRAW STATE
+        for(int i=0; i<organisms.size(); i++){
+            if(organisms.elementAt(i).isAlive())
+                organisms.elementAt(i).setActive(true);
+        }
+        turnNum++;
         this.ridOfTheDead();
     }
 
@@ -115,9 +130,5 @@ public abstract class World {
     public void moveOrganismToGraveyard(Organism organism){
         this.board.setBoardField(organism.getPos(), null);
         organism.setAlive(false);
-    }
-
-    public Map<Integer, String> getDirections(){
-        return directions;
     }
 }

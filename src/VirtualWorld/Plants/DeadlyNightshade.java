@@ -20,4 +20,8 @@ public class DeadlyNightshade extends Plant{
     protected Organism createChild(Point pos){
         return new DeadlyNightshade(pos);
     }
+    @Override
+    public String toString() {
+        return "Deadly Nightshade " + statsToString();
+    }
 }

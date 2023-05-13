@@ -30,4 +30,8 @@ public class Turtle extends Animal{
     protected Organism createChild(Point pos) {
         return new Turtle(pos);
     }
+    @Override
+    public String toString() {
+        return "Turtle " + statsToString();
+    }
 }

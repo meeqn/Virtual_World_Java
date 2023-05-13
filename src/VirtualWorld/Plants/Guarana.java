@@ -21,4 +21,8 @@ public class Guarana extends Plant{
     protected Organism createChild(Point pos){
         return new Guarana(pos);
     }
+    @Override
+    public String toString() {
+        return "Guarana " + statsToString();
+    }
 }
