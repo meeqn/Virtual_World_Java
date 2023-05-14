@@ -1,6 +1,7 @@
 package VirtualWorld.Worlds;
 
 import VirtualWorld.Organism;
+import VirtualWorld.Animals.Human;
 import VirtualWorld.World;
 
 import javax.swing.*;
@@ -42,8 +43,15 @@ public class RectWorld extends World {
         return surrPoints;
     }
     @Override
-    public Point generateNextPosUsingKeyboard(Organism org, int range){
-        this.logTextArea.append("Move using ↑ ↓ → ←\n");
+    public void setLogTextArea(JTextArea logTextArea){
+        logTextArea.append("Move using ↑ ↓ → ←, press s to use power \n");
+        super.setLogTextArea(logTextArea);
+    }
+    @Override
+    public Point generateNextPosUsingKeyboard(Human human, int range){
+//        switch(window.getPressedKeyCode()){
+//
+//        }
         return null; //TODO FINISH
     }
 }

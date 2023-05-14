@@ -41,6 +41,7 @@ public abstract class World {
     protected Vector<Organism> organisms = new Vector<>();
 
     protected JPanel boardSpace;
+    protected Window window;
     protected JTextArea logTextArea;
     protected int turnNum;
 
@@ -81,7 +82,9 @@ public abstract class World {
     }
     public void setLogTextArea(JTextArea logTextArea){
         this.logTextArea = logTextArea;
-        logTextArea.setText("New world connected!\n");
+    }
+    public void setWindow(Window window){
+        this.window = window;
     }
 
     public JTextArea getLogTextArea(){
@@ -98,7 +101,7 @@ public abstract class World {
             return possibleMoves.get(move);
         }
     }
-    public abstract Point generateNextPosUsingKeyboard(Organism org, int range);
+    public abstract Point generateNextPosUsingKeyboard(Human human, int range);
     public abstract ArrayList<Point> getSurroundingFields(Point field, boolean mustBeEmpty, int range);
     public void nextTurn(){
         logTextArea.append("--Turn : " + turnNum + "--\n");
