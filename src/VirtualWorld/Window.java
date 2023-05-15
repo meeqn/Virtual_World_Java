@@ -3,7 +3,6 @@ package VirtualWorld;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 public class Window extends JFrame {
@@ -58,6 +57,7 @@ public class Window extends JFrame {
             this.requestFocus();
             world.nextTurn();
             boardSpace.repaint();
+            pressedKeyCode = 0;
         });
         buttonSpace.add(nextTurnButton);
         JButton saveButton = new JButton("Save");
@@ -95,12 +95,14 @@ public class Window extends JFrame {
             public void keyPressed(KeyEvent e){
                 pressedKeyCode = e.getKeyCode();
                 if(pressedKeyCode == KeyEvent.VK_ESCAPE) {
-                    setVisible(false); //you can't see me!
+                    setVisible(false);
                     dispose();
                 }
-                //todo send additional info if user wants to use skill
-                world.nextTurn();
-                boardSpace.repaint();
+                else {
+                    world.nextTurn();
+                    boardSpace.repaint();
+                    pressedKeyCode = 0;
+                }
             }
         });
 

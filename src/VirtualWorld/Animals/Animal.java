@@ -54,7 +54,9 @@ public abstract class Animal extends Organism{
     protected void setMoveDist(int moveDist){
         this.moveDist = moveDist;
     }
-
+    public void setNextPos(Point nextPos){
+        this.nextPos = nextPos;
+    }
     public Point getNextPos() {
         return nextPos;
     }

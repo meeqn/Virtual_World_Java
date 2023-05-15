@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.awt.event.KeyEvent;
 public class RectWorld extends World {
     private int tileScale;
     public RectWorld(int sizeX, int sizeY, Vector<Organism> organisms){
@@ -49,9 +50,26 @@ public class RectWorld extends World {
     }
     @Override
     public Point generateNextPosUsingKeyboard(Human human, int range){
-//        switch(window.getPressedKeyCode()){
-//
-//        }
-        return null; //TODO FINISH
+        Point nextPos = new Point(human.getPos().x, human.getPos().y);
+        switch(window.getPressedKeyCode()){
+            case KeyEvent.VK_S:
+                logTextArea.append(human.useSkill());
+                break;
+            case KeyEvent.VK_UP:
+                nextPos.y-=1;
+                break;
+            case KeyEvent.VK_DOWN:
+                nextPos.y+=1;
+                break;
+            case KeyEvent.VK_LEFT:
+                nextPos.x-=1;
+                break;
+            case KeyEvent.VK_RIGHT:
+                nextPos.x+=1;
+                break;
+        }
+        if(nextPos.x == human.getPos().x && nextPos.y == human.getPos().y)
+            nextPos=null;
+        return nextPos;
     }
 }

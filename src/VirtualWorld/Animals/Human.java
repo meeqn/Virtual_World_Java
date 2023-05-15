@@ -69,6 +69,14 @@ public class Human extends Animal{
             world.getLogTextArea().append("Skill active, remaining turns: " + skillRemainingTurns + "\n");
 
         nextPos = world.generateNextPosUsingKeyboard(this, moveDist);
+        if(nextPos!=null){
+            if(world.getBoard().isFieldEmpty(nextPos))
+                world.moveAnimalToNextPos(this);
+            else{
+                world.getBoard().getBoardField(nextPos).collision(this);
+            }
+        }
+        this.setActive(false);
     }
     @Override
     public void collision(Animal invader){

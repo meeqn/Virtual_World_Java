@@ -24,6 +24,5 @@ public class Main {
         Vector<Organism> organisms = createOrganisms();
         World world = new RectWorld(10, 10, organisms);
         Window mainWin = new Window(world, 800, 800);
-
     }
 }
