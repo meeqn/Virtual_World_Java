@@ -4,8 +4,9 @@ import VirtualWorld.Animals.Animal;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Guarana extends Plant{
+public class Guarana extends Plant implements Serializable {
     final static int GUARANA_STRENGTH = 0;
     final static Color GUARANA_COLOR = Color.red;
     public Guarana(Point pos){
@@ -14,7 +15,7 @@ public class Guarana extends Plant{
     @Override
     public void collision(Animal invader){
         invader.setStrength(invader.getStrength()+3);
-        world.moveOrganismToGraveyard(this);
+        world.moveOrganismToGraveyard(this, invader);
         world.moveAnimalToNextPos(invader);
     }
     @Override

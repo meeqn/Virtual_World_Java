@@ -3,8 +3,9 @@ package VirtualWorld.Animals;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Turtle extends Animal{
+public class Turtle extends Animal implements Serializable {
     final static int TURTLE_INITIATIVE = 1;
     final static int TURTLE_STRENGTH = 2;
     final static Color TURTLE_COLOR = new Color(77, 135, 100);

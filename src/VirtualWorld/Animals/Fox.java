@@ -1,8 +1,9 @@
 package VirtualWorld.Animals;
 import VirtualWorld.Organism;
 import java.awt.*;
+import java.io.Serializable;
 
-public class Fox extends Animal{
+public class Fox extends Animal implements Serializable {
     final static int FOX_INITIATIVE = 7;
     final static int FOX_STRENGTH = 3;
     final static Color FOX_COLOR = new Color(245, 174, 10);

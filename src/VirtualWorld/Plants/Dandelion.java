@@ -2,8 +2,9 @@ package VirtualWorld.Plants;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Dandelion extends Plant{
+public class Dandelion extends Plant implements Serializable {
     final static int DANDELION_STRENGTH = 0;
     final static Color DANDELION_COLOR = new Color(255, 239, 0);
     public Dandelion(Point pos){

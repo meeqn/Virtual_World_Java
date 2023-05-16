@@ -2,12 +2,13 @@ package VirtualWorld;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.*;
 
 import VirtualWorld.Animals.*;
 
-public abstract class World {
-    public static class Board {
+public abstract class World implements Serializable{
+    public static class Board implements Serializable{
         protected int sizeX, sizeY;
         private Organism[][] fields;
         public Board(int sizeX, int sizeY){
@@ -116,8 +117,9 @@ public abstract class World {
             if(organisms.elementAt(i).isAlive())
                 organisms.elementAt(i).setActive(true);
         }
-        turnNum++;
         this.ridOfTheDead();
+        logTextArea.append("--Turn : " + turnNum + "-- ended \n");
+        turnNum++;
     }
 
     public Board getBoard() {
@@ -130,8 +132,26 @@ public abstract class World {
         board.setBoardField(animal.getPos(), animal);
     }
 
-    public void moveOrganismToGraveyard(Organism organism){
+    public void moveOrganismToGraveyard(Organism organism, Organism killer){
         this.board.setBoardField(organism.getPos(), null);
         organism.setAlive(false);
+        if(killer!=null)
+            logTextArea.append(killer.toString() + " killed " + organism.toString() + " \n");
+    }
+    public void saveToFile() throws IOException, ClassNotFoundException {
+        FileOutputStream fos = new FileOutputStream("save.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(this);
+        oos.close();
+        fos.close();
+
+    }
+    public static World loadFromFile() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("save.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        World tmpWorld = (World) ois.readObject();
+        ois.close();
+        fis.close();
+        return tmpWorld;
     }
 }

@@ -4,8 +4,9 @@ import VirtualWorld.Organism;
 import VirtualWorld.Animals.Animal;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class DeadlyNightshade extends Plant{
+public class DeadlyNightshade extends Plant implements Serializable {
     final static int DEADLY_NIGHTSHADE_STRENGTH = 99;
     final static Color DEADLY_NIGHTSHADE_COLOR = Color.BLACK;
     public DeadlyNightshade(Point pos){
@@ -13,8 +14,8 @@ public class DeadlyNightshade extends Plant{
     }
     @Override
     public void collision(Animal invader){
-        world.moveOrganismToGraveyard(invader);
-        world.moveOrganismToGraveyard(this);
+        world.moveOrganismToGraveyard(invader, this);
+        world.moveOrganismToGraveyard(this, invader);
     }
     @Override
     protected Organism createChild(Point pos){

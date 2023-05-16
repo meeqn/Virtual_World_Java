@@ -3,8 +3,10 @@ package VirtualWorld.Animals;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Human extends Animal{
+public class Human extends Animal implements Serializable {
     final static int HUMAN_INITIATIVE = 5;
     final static int HUMAN_STRENGTH = 5;
     final static Color HUMAN_COLOR = Color.BLACK;
@@ -25,6 +27,7 @@ public class Human extends Animal{
         }
         else if(!isSkillActive && skillTimeout==0){
             isSkillActive=true;
+            skillTimeout = SKILL_COOLDOWN;
             skillRemainingTurns = SKILL_DURATION;
             return "Skill activated! \n";
         }
@@ -32,34 +35,25 @@ public class Human extends Animal{
             return "Remaining skill cooldown! " + skillTimeout + " turns remaining! \n";
 
     }
+    private void skillEffect(){
+        ArrayList<Point> surrFields = world.getSurroundingFields(this.pos, false, 1);
+        for(int i = 0; i<surrFields.size(); i++){
+            if(!world.getBoard().isFieldEmpty(surrFields.get(i))){
+                world.moveOrganismToGraveyard(world.getBoard().getBoardField(surrFields.get(i)), this);
+            }
+        }
+    }
 
     private void skillTurnPass(){
         if(isSkillActive){
             if(skillRemainingTurns>0)
                 skillRemainingTurns--;
-            else if(skillRemainingTurns==0)
-                skillTimeout = SKILL_COOLDOWN;
+            else if(skillRemainingTurns==0) {
+                isSkillActive=false;
+            }
         }
-        else if(skillTimeout>0)
+        else if(skillTimeout>0 && skillRemainingTurns==0)
             skillTimeout--;
-    }
-
-    public int getSkillRemainingTurns() {
-        return skillRemainingTurns;
-    }
-
-    public int getSkillTimeout() {
-        return skillTimeout;
-    }
-    public void setSkillActive(boolean isSkillActive){
-        this.isSkillActive = isSkillActive;
-    }
-    public void setSkillTimeout(int timeout){
-        this.skillTimeout=timeout;
-    }
-
-    public void setSkillRemainingTurns(int duration){
-        this.skillRemainingTurns = duration;
     }
 
     @Override
@@ -80,7 +74,13 @@ public class Human extends Animal{
     }
     @Override
     public void collision(Animal invader){
-        //TODO
+        if(isSkillActive) {
+            skillEffect();
+            world.moveAnimalToNextPos(this);
+        }
+        else{
+            this.organismGetsAttacked(invader);
+        }
     }
     @Override
     protected Organism createChild(Point pos) {

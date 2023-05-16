@@ -2,8 +2,9 @@ package VirtualWorld.Animals;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Sheep extends Animal{
+public class Sheep extends Animal implements Serializable {
     final static int SHEEP_INITIATIVE = 4;
     final static int SHEEP_STRENGTH = 4;
     final static Color SHEEP_COLOR = Color.WHITE;

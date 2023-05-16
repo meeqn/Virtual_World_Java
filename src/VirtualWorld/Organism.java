@@ -1,8 +1,10 @@
 package VirtualWorld;
 import java.awt.Point;
 import java.awt.Color;
+import java.io.Serializable;
+
 import VirtualWorld.Animals.Animal;
-public abstract class Organism implements Comparable<Organism>{
+public abstract class Organism implements Comparable<Organism>, Serializable {
     static final int STARTING_AGE = 0;
     protected Color color;
     protected Integer age, initiative, strength;
@@ -37,11 +39,12 @@ public abstract class Organism implements Comparable<Organism>{
 
     public void organismGetsAttacked(Animal invader){
         if(strength < invader.getStrength()){
-            world.moveOrganismToGraveyard(this);
+            world.moveOrganismToGraveyard(this, invader);
             world.moveAnimalToNextPos(invader);
+            world.logTextArea.append(invader.toString() + " killed " + this.toString() + " \n");
         }
         else{
-            world.moveOrganismToGraveyard(invader);
+            world.moveOrganismToGraveyard(invader, this);
         }
     }
     public int getAge() {
@@ -78,9 +81,9 @@ public abstract class Organism implements Comparable<Organism>{
 
     public int compareTo(Organism o){
         if(this.initiative!=o.getInitiative())
-            return this.initiative.compareTo(o.getInitiative());
+            return (-1)*this.initiative.compareTo(o.getInitiative());
         if(this.age!=o.getAge())
-            return this.initiative.compareTo(o.getAge());
+            return (-1)*this.initiative.compareTo(o.getAge());
         return 0;
     }
     protected abstract Organism createChild(Point pos);

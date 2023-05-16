@@ -3,8 +3,9 @@ package VirtualWorld.Animals;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Antelope extends Animal {
+public class Antelope extends Animal implements Serializable {
     final static int ANTELOPE_INITIATIVE = 4;
     final static int ANTELOPE_STRENGTH = 4;
     final static int ANTELOPE_MOVE_DIST = 2;

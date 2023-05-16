@@ -6,10 +6,11 @@ import VirtualWorld.World;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.awt.event.KeyEvent;
-public class RectWorld extends World {
+public class RectWorld extends World implements Serializable {
     private int tileScale;
     public RectWorld(int sizeX, int sizeY, Vector<Organism> organisms){
         super(sizeX, sizeY, organisms);
@@ -45,16 +46,33 @@ public class RectWorld extends World {
     }
     @Override
     public void setLogTextArea(JTextArea logTextArea){
-        logTextArea.append("Move using ↑ ↓ → ←, press s to use power \n");
         super.setLogTextArea(logTextArea);
     }
     @Override
     public Point generateNextPosUsingKeyboard(Human human, int range){
         Point nextPos = new Point(human.getPos().x, human.getPos().y);
-        switch(window.getPressedKeyCode()){
-            case KeyEvent.VK_S:
-                logTextArea.append(human.useSkill());
+        logTextArea.append("Move using ↑ ↓ → ←, press s to use power \n");
+        boardSpace.repaint();
+        while (true) {
+            try {
+                window.latchKeyPressed.await();
                 break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        while(window.pressedKey == KeyEvent.VK_S){
+            logTextArea.append(human.useSkill());
+            while (true) {
+                try {
+                    window.latchKeyPressed.await();
+                    break;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        switch(window.pressedKey){
             case KeyEvent.VK_UP:
                 nextPos.y-=1;
                 break;
@@ -68,7 +86,7 @@ public class RectWorld extends World {
                 nextPos.x+=1;
                 break;
         }
-        if(nextPos.x == human.getPos().x && nextPos.y == human.getPos().y)
+        if((nextPos.x == human.getPos().x && nextPos.y == human.getPos().y) || !board.isFieldInBoundaries(nextPos))
             nextPos=null;
         return nextPos;
     }

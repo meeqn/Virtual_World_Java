@@ -3,8 +3,9 @@ package VirtualWorld.Plants;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Grass extends Plant{
+public class Grass extends Plant implements Serializable {
     final static int GRASS_STRENGTH = 0;
     final static Color GRASS_COLOR = Color.green;
     public Grass(Point pos){

@@ -1,10 +1,12 @@
 package VirtualWorld.Animals;
 import java.awt.Point;
 import java.awt.Color;
+import java.io.Serializable;
+
 import VirtualWorld.Organism;
 
 
-public abstract class Animal extends Organism{
+public abstract class Animal extends Organism implements Serializable {
     protected Point nextPos;
     protected static final int STANDARD_MOVE_DIST = 1;
     protected int moveDist;
@@ -24,6 +26,7 @@ public abstract class Animal extends Organism{
             Organism offspring = this.createChild(childPos);
             world.addOrganismToWorld(offspring, false);
             this.setActive(false);
+            world.getLogTextArea().append(this.toString() + " and " + breeder.toString() + " had a baby: " + offspring.toString() + " \n");
         }
     }
 

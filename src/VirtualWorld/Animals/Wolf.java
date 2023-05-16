@@ -3,8 +3,9 @@ package VirtualWorld.Animals;
 import VirtualWorld.Organism;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Wolf extends Animal{
+public class Wolf extends Animal implements Serializable {
     final static int WOLF_INITIATIVE = 5;
     final static int WOLF_STRENGTH = 9;
     final static Color WOLF_COLOR = Color.DARK_GRAY;

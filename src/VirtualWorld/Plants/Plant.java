@@ -3,8 +3,9 @@ import VirtualWorld.Organism;
 import VirtualWorld.Animals.Animal;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public abstract class Plant extends Organism {
+public abstract class Plant extends Organism implements Serializable {
     protected static final int STANDARD_SOWING_DIST = 1;
     static int DEFAULT_SOWING_DIST = 1;
     protected int sowingDist = DEFAULT_SOWING_DIST;
