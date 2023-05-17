@@ -19,7 +19,7 @@ public class RectWorld extends World implements Serializable {
     @Override
     public void setBoardSpace(JPanel boardSpace){
         super.setBoardSpace(boardSpace);
-        this.tileScale = Math.min(boardSpace.getWidth()/this.getSizeX(), boardSpace.getHeight()/this.getSizeY());
+        this.tileScale = Math.min((boardSpace.getWidth()-7)/this.getSizeX(), boardSpace.getHeight()/this.getSizeY());
         this.polygons = new Polygon[this.getSizeY()][this.getSizeX()];
         for(int i = 0; i<this.getSizeY(); i++){
             for(int j = 0; j<this.getSizeX(); j++){
@@ -43,10 +43,6 @@ public class RectWorld extends World implements Serializable {
             }
         }
         return surrPoints;
-    }
-    @Override
-    public void setLogTextArea(JTextArea logTextArea){
-        super.setLogTextArea(logTextArea);
     }
     @Override
     public Point generateNextPosUsingKeyboard(Human human, int range){

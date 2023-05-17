@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Human extends Animal implements Serializable {
     final static int HUMAN_INITIATIVE = 5;
     final static int HUMAN_STRENGTH = 5;
-    final static Color HUMAN_COLOR = Color.BLACK;
+    final static Color HUMAN_COLOR = new Color(240, 229, 202);
     final static int SKILL_COOLDOWN = 5;
     final static int SKILL_DURATION = 5;
     private int skillTimeout;
@@ -67,7 +67,13 @@ public class Human extends Animal implements Serializable {
             if(world.getBoard().isFieldEmpty(nextPos))
                 world.moveAnimalToNextPos(this);
             else{
-                world.getBoard().getBoardField(nextPos).collision(this);
+                if(isSkillActive) {
+                    skillEffect();
+                    world.moveAnimalToNextPos(this);
+                }
+                else{
+                    world.getBoard().getBoardField(nextPos).collision(this);
+                }
             }
         }
         this.setActive(false);

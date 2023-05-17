@@ -2,6 +2,7 @@ import VirtualWorld.*;
 import VirtualWorld.Animals.*;
 import VirtualWorld.Plants.Sosnowski;
 import VirtualWorld.Window;
+import VirtualWorld.Worlds.HexWorld;
 import VirtualWorld.Worlds.RectWorld;
 
 import java.awt.*;
@@ -22,7 +23,7 @@ public class Main {
     }
     public static void main(String[] args) {
         Vector<Organism> organisms = createOrganisms();
-        World world = new RectWorld(10, 10, organisms);
+        World world = new RectWorld(15, 15, organisms);
         Window mainWin = new Window(world, 800, 800);
     }
 }

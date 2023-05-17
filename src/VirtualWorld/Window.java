@@ -1,10 +1,19 @@
 package VirtualWorld;
 
 
+import VirtualWorld.Animals.*;
+import VirtualWorld.Plants.*;
+import VirtualWorld.Worlds.HexWorld;
+import VirtualWorld.Worlds.RectWorld;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
@@ -15,7 +24,13 @@ public class Window extends JFrame implements Serializable {
     private JPanel logSpace;
     private JPanel buttonSpace;
     private JTextArea logTextArea;
+    private JPopupMenu popupMenu;
     private boolean isTurnActive;
+    private int xOffset;
+    private int yOffset;
+    private Organism selectedOrganism;
+    private Point selectedPos;
+    private mouseListener ml;
     public static final String title = "Virtual World Java - Mikołaj Brakowski";
     public static CountDownLatch latchKeyPressed = new CountDownLatch(1);
     public static CountDownLatch latchNextTurn = new CountDownLatch(1);
@@ -33,6 +48,94 @@ public class Window extends JFrame implements Serializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private JPopupMenu createPopupMenu(){
+        popupMenu = new JPopupMenu();
+        JMenuItem sheepItem = new JMenuItem("Sheep");
+        JMenuItem wolfItem = new JMenuItem("Wolf");
+        JMenuItem antelopeItem = new JMenuItem("Antelope");
+        JMenuItem turtleItem = new JMenuItem("Turtle");
+        JMenuItem foxItem = new JMenuItem("Fox");
+
+        JMenuItem grassItem = new JMenuItem("Grass");
+        JMenuItem dandelionItem = new JMenuItem("Dandelion");
+        JMenuItem deadlyNightshadeItem = new JMenuItem("DeadlyNightshade");
+        JMenuItem sosnowskiItem = new JMenuItem("Sosnowski's Hogweed");
+        JMenuItem guaranaItem = new JMenuItem("Guarana");
+
+        popupMenu.add(sheepItem);
+        popupMenu.add(wolfItem);
+        popupMenu.add(antelopeItem);
+        popupMenu.add(turtleItem);
+        popupMenu.add(foxItem);
+        popupMenu.add(grassItem);
+        popupMenu.add(dandelionItem);
+        popupMenu.add(deadlyNightshadeItem);
+        popupMenu.add(sosnowskiItem);
+        popupMenu.add(guaranaItem);
+        sheepItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Sheep(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        wolfItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Wolf(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        turtleItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Turtle(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        antelopeItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Antelope(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        foxItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Fox(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        grassItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Grass(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        sosnowskiItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Sosnowski(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        guaranaItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Guarana(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        deadlyNightshadeItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new DeadlyNightshade(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+        dandelionItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                world.addOrganismToWorld(new Dandelion(selectedPos), true);
+                boardSpace.repaint();
+            }
+        });
+
+        return popupMenu;
     }
     private JPanel createBoardSpace(){
         JPanel boardSpace = new JPanel() {
@@ -124,9 +227,48 @@ public class Window extends JFrame implements Serializable {
         buttonSpace.add(loadButton);
 
         JButton switchButton = new JButton("Switch Shape");
+        switchButton.addActionListener(e -> {
+            if(this.world instanceof RectWorld){
+                this.world = new HexWorld(this.world.getSizeX(), this.world.getSizeY(), this.world.organisms);
+            }
+            else if(this.world instanceof HexWorld){
+                this.world = new RectWorld(this.world.getSizeX(), this.world.getSizeY(), this.world.organisms);
+            }
+            this.world.setWindow(this);
+            this.world.setBoardSpace(boardSpace);
+            this.world.setLogTextArea(logTextArea);
+            this.removeMouseListener(ml);
+            ml = new mouseListener(this.world);
+            addMouseListener(ml);
+            boardSpace.repaint();
+        });
         buttonSpace.add(switchButton);
 
         return buttonSpace;
+    }
+    private class mouseListener extends MouseAdapter implements Serializable{
+        World world;
+        public mouseListener(World world){
+            this.world = world;
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+            boolean control = true;
+            for(int i = 0; i<world.getSizeY(); i++) {
+                if (control) {
+                    for (int j = 0; j < world.getSizeX(); j++) {
+                        if (world.getPolygons()[i][j].contains(new Point(e.getX()-xOffset, e.getY()-yOffset))) {
+                            selectedPos = new Point(j,i);
+                            if(world.board.isFieldEmpty(selectedPos)) {
+                                popupMenu.show(boardSpace, e.getX()-xOffset, e.getY()-yOffset);
+                            }
+                            control = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
     public Window(World world, int sizeX, int sizeY){
         this.world = world;
@@ -144,6 +286,9 @@ public class Window extends JFrame implements Serializable {
         logSpace = createLogSpace();
         add(logSpace);
 
+        popupMenu = createPopupMenu();
+        add(popupMenu);
+
         buttonSpace = createButtonSpace();
         add(buttonSpace);
         addKeyListener(new KeyAdapter(){
@@ -154,10 +299,13 @@ public class Window extends JFrame implements Serializable {
                 latchKeyPressed = new CountDownLatch(1);
             }
         });
-
+        ml = new mouseListener(this.world);
+        addMouseListener(ml);
         setLayout(null);
         setVisible(true);
         requestFocus();
+        xOffset = this.getInsets().left;
+        yOffset = this.getInsets().top;
         play();
     }
 }
