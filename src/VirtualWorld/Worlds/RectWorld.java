@@ -31,7 +31,7 @@ public class RectWorld extends World implements Serializable {
     }
     @Override
     public ArrayList<Point> getSurroundingFields(Point field, boolean mustBeEmpty, int range) {
-        ArrayList<Point> surrPoints = new ArrayList<Point>();
+        ArrayList<Point> surrPoints = new ArrayList<>();
         int[] xParams = {0, 1, 0, -1};
         int[] yParams = {-1, 0, 1, 0};
         for (int i = 0; i < xParams.length; i++) {

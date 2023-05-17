@@ -26,7 +26,7 @@ public abstract class Animal extends Organism implements Serializable {
             Organism offspring = this.createChild(childPos);
             world.addOrganismToWorld(offspring, false);
             this.setActive(false);
-            world.getLogTextArea().append(this.toString() + " and " + breeder.toString() + " had a baby: " + offspring.toString() + " \n");
+            world.getLogTextArea().append(this + " and " + breeder.toString() + " had a baby: " + offspring.toString() + " \n");
         }
     }
 
@@ -56,9 +56,6 @@ public abstract class Animal extends Organism implements Serializable {
 
     protected void setMoveDist(int moveDist){
         this.moveDist = moveDist;
-    }
-    public void setNextPos(Point nextPos){
-        this.nextPos = nextPos;
     }
     public Point getNextPos() {
         return nextPos;

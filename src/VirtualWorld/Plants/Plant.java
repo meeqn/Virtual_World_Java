@@ -6,7 +6,6 @@ import java.awt.*;
 import java.io.Serializable;
 
 public abstract class Plant extends Organism implements Serializable {
-    protected static final int STANDARD_SOWING_DIST = 1;
     static int DEFAULT_SOWING_DIST = 1;
     protected int sowingDist = DEFAULT_SOWING_DIST;
     static int PLANT_INITIATIVE = 0;

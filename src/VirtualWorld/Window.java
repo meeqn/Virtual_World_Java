@@ -10,12 +10,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.text.DefaultCaret;
 public class Window extends JFrame implements Serializable {
@@ -25,10 +25,11 @@ public class Window extends JFrame implements Serializable {
     private JPanel buttonSpace;
     private JTextArea logTextArea;
     private JPopupMenu popupMenu;
+
+    private DictWindow dictionary;
     private boolean isTurnActive;
-    private int xOffset;
-    private int yOffset;
-    private Organism selectedOrganism;
+    private final int xOffset;
+    private final int yOffset;
     private Point selectedPos;
     private mouseListener ml;
     public static final String title = "Virtual World Java - Mikołaj Brakowski";
@@ -74,65 +75,45 @@ public class Window extends JFrame implements Serializable {
         popupMenu.add(deadlyNightshadeItem);
         popupMenu.add(sosnowskiItem);
         popupMenu.add(guaranaItem);
-        sheepItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Sheep(selectedPos), true);
-                boardSpace.repaint();
-            }
+        sheepItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Sheep(selectedPos), true);
+            boardSpace.repaint();
         });
-        wolfItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Wolf(selectedPos), true);
-                boardSpace.repaint();
-            }
+        wolfItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Wolf(selectedPos), true);
+            boardSpace.repaint();
         });
-        turtleItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Turtle(selectedPos), true);
-                boardSpace.repaint();
-            }
+        turtleItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Turtle(selectedPos), true);
+            boardSpace.repaint();
         });
-        antelopeItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Antelope(selectedPos), true);
-                boardSpace.repaint();
-            }
+        antelopeItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Antelope(selectedPos), true);
+            boardSpace.repaint();
         });
-        foxItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Fox(selectedPos), true);
-                boardSpace.repaint();
-            }
+        foxItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Fox(selectedPos), true);
+            boardSpace.repaint();
         });
-        grassItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Grass(selectedPos), true);
-                boardSpace.repaint();
-            }
+        grassItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Grass(selectedPos), true);
+            boardSpace.repaint();
         });
-        sosnowskiItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Sosnowski(selectedPos), true);
-                boardSpace.repaint();
-            }
+        sosnowskiItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Sosnowski(selectedPos), true);
+            boardSpace.repaint();
         });
-        guaranaItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Guarana(selectedPos), true);
-                boardSpace.repaint();
-            }
+        guaranaItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Guarana(selectedPos), true);
+            boardSpace.repaint();
         });
-        deadlyNightshadeItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new DeadlyNightshade(selectedPos), true);
-                boardSpace.repaint();
-            }
+        deadlyNightshadeItem.addActionListener(e -> {
+            world.addOrganismToWorld(new DeadlyNightshade(selectedPos), true);
+            boardSpace.repaint();
         });
-        dandelionItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                world.addOrganismToWorld(new Dandelion(selectedPos), true);
-                boardSpace.repaint();
-            }
+        dandelionItem.addActionListener(e -> {
+            world.addOrganismToWorld(new Dandelion(selectedPos), true);
+            boardSpace.repaint();
         });
 
         return popupMenu;
@@ -195,9 +176,7 @@ public class Window extends JFrame implements Serializable {
                 try {
                     world.saveToFile();
                     logTextArea.append("World saved successfully \n");
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (IOException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
             }
@@ -218,9 +197,7 @@ public class Window extends JFrame implements Serializable {
                 logTextArea.append("World loaded! \n");
                 boardSpace.repaint();
 
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
         });
@@ -243,6 +220,13 @@ public class Window extends JFrame implements Serializable {
             boardSpace.repaint();
         });
         buttonSpace.add(switchButton);
+
+        JButton dictionaryButton = new JButton("Dictionary");
+        dictionaryButton.addActionListener(e -> {
+            dictionary.setVisible(true);
+            this.requestFocusInWindow();
+        });
+        buttonSpace.add(dictionaryButton);
 
         return buttonSpace;
     }
@@ -270,6 +254,38 @@ public class Window extends JFrame implements Serializable {
             }
         }
     }
+
+    private class DictWindow extends JFrame implements Serializable{
+        HashMap<Color, String> orgDict;
+        public DictWindow(){
+            Dimension dim = new Dimension(400, 500);
+            setSize(dim);
+            setTitle(title);
+            setResizable(false);
+            setLayout(null);
+            orgDict = new HashMap<>();
+            orgDict.put(new Human(null).getColor(), "Human");
+            orgDict.put(new Sheep(null).getColor(), "Sheep");
+            orgDict.put(new Wolf(null).getColor(), "Wolf");
+            orgDict.put(new Turtle(null).getColor(), "Turtle");
+            orgDict.put(new Antelope(null).getColor(), "Antelope");
+            orgDict.put(new Fox(null).getColor(), "Fox");
+            orgDict.put(new Dandelion(null).getColor(), "Dandelion");
+            orgDict.put(new DeadlyNightshade(null).getColor(), "DeadlyNightshade");
+            orgDict.put(new Grass(null).getColor(), "Grass");
+            orgDict.put(new Guarana(null).getColor(), "Guarana");
+            orgDict.put(new Sosnowski(null).getColor(), "Sosnowski's Hogweed");
+            int y = 10;
+            int x = 10;
+            for(Map.Entry<Color, String> entry : orgDict.entrySet()) {
+                Label newLabel = new Label(entry.getValue());
+                newLabel.setBounds(x + 30, y, 150, 20);
+                newLabel.setBackground(entry.getKey());
+                this.add(newLabel);
+                y += 20;
+            }
+        }
+    }
     public Window(World world, int sizeX, int sizeY){
         this.world = world;
         world.setWindow(this);
@@ -291,6 +307,9 @@ public class Window extends JFrame implements Serializable {
 
         buttonSpace = createButtonSpace();
         add(buttonSpace);
+
+        dictionary = new DictWindow();
+
         addKeyListener(new KeyAdapter(){
             @Override
             public void keyPressed(KeyEvent e){

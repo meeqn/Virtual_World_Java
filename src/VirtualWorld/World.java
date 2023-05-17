@@ -136,7 +136,7 @@ public abstract class World implements Serializable{
         this.board.setBoardField(organism.getPos(), null);
         organism.setAlive(false);
         if(killer!=null)
-            logTextArea.append(killer.toString() + " killed " + organism.toString() + " \n");
+            logTextArea.append(killer + " killed " + organism + " \n");
     }
     public void saveToFile() throws IOException, ClassNotFoundException {
         FileOutputStream fos = new FileOutputStream("save.ser");

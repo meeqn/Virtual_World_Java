@@ -58,7 +58,7 @@ public class HexWorld extends World implements Serializable {
     }
     @Override
     public ArrayList<Point> getSurroundingFields(Point field, boolean mustBeEmpty, int range) {
-        ArrayList<Point> surrPoints = new ArrayList<Point>();
+        ArrayList<Point> surrPoints = new ArrayList<>();
         int[] xParams;
         int[] yParams;
         if(field.x%2==1) {

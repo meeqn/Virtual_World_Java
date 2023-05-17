@@ -1,9 +1,8 @@
 import VirtualWorld.*;
 import VirtualWorld.Animals.*;
-import VirtualWorld.Plants.Sosnowski;
+import VirtualWorld.Plants.*;
 import VirtualWorld.Window;
-import VirtualWorld.Worlds.HexWorld;
-import VirtualWorld.Worlds.RectWorld;
+import VirtualWorld.Worlds.*;
 
 import java.awt.*;
 import java.util.Vector;

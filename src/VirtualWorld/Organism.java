@@ -41,7 +41,7 @@ public abstract class Organism implements Comparable<Organism>, Serializable {
         if(strength < invader.getStrength()){
             world.moveOrganismToGraveyard(this, invader);
             world.moveAnimalToNextPos(invader);
-            world.logTextArea.append(invader.toString() + " killed " + this.toString() + " \n");
+            world.logTextArea.append(invader + " killed " + this + " \n");
         }
         else{
             world.moveOrganismToGraveyard(invader, this);
